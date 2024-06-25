@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ver Denuncias</title>
+    <link rel="stylesheet" href="./css/verDenuncia.css" />
+</head>
+
+<body>
+    <h2 class="tituloPrincipal">Ver denuncia</h2>
+    <div id="denunciasList" class="grid-container"></div>
+    <script>
+        window.onload = function () {
+            mostrarDenuncias();
+        };
+        function mostrarDenuncias() {
+            const denuncias = JSON.parse(localStorage.getItem('denuncias')) || [];
+            const denunciasList = document.getElementById('denunciasList');
+            denunciasList.innerHTML = '';
+            if (denuncias.length === 0) {
+                denunciasList.innerHTML = '<p>No hay denuncias cifradas.</p>';
+            } else {
+                denuncias.forEach((denuncia, index) => {
+                    const mensajeCifrado = denuncia.trim();
+                    const denunciaHTML = `
+                        <div class="containerMensaje">
+                            <p class="texto"><strong class="texto2">Denuncia:</strong> ${mensajeCifrado}</p>
+                            <div class="texto hidden" id="mensajeDecifrado-${index}"></div>
+                            <button class="btnPrincipal" onclick="decifrarMensaje(${index})">Decifrar</button>
+                        </div>
+                    `;
+                    denunciasList.innerHTML += denunciaHTML;
+                });
+            }
+        }
+        function decifrarMensaje(index) {
+            const mensajeDecifradoDiv = document.getElementById(`mensajeDecifrado-${index}`);
+            if (mensajeDecifradoDiv.classList.contains('hidden')) {
+                const denuncias = JSON.parse(localStorage.getItem('denuncias')) || [];
+                const mensajeCifrado = denuncias[index].trim();
+                let decodedMessage = '';
+                const codigos = mensajeCifrado.split(' ');
+                codigos.forEach(codigo => {
+                    if (codigo === '_') {
+                        decodedMessage += ' ';
+                    } else {
+                        const letra = String.fromCharCode(parseInt(codigo) + 64);
+                        decodedMessage += letra;
+                    }
+                });
+
+                mensajeDecifradoDiv.innerHTML = `<p><strong class="texto2">D. decifrada:</strong> ${decodedMessage}</p>`;
+                mensajeDecifradoDiv.classList.remove('hidden');
+            } else {
+                mensajeDecifradoDiv.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+
+</html>

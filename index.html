@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/style.css" />
+
+</head>
+
+<body>
+    <h1 class="tituloPrincipal">Codigo Esperanza</h1>
+    <div class="divBotones">
+        <button class="btnPrincipal" onclick="mostrarAlertaDenunciar()">Denunciar</button>
+        <button class="btnPrincipal" onclick="verDenuncias()">Ver denuncias</button>
+    </div>
+
+
+    <script>
+        function mostrarAlertaDenunciar() {
+            swal({
+                title: "DENUNCIA!",
+                text: "De la forma mas segura ya que encriptamos el mensaje",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDenounce) => {
+                    if (willDenounce) {
+                        window.location.href = 'denunciar.html';
+                    }
+                });
+        }
+        function verDenuncias() {
+            window.location.href = 'verdenuncia.html';
+        }
+        function irADenunciar() {
+            window.location.href = 'denunciar.html';
+        }
+        function verDenuncias() {
+            window.location.href = 'verdenuncia.html';
+        }
+
+        function mostrarDenuncias() {
+            const denuncias = JSON.parse(localStorage.getItem('denuncias')) || [];
+
+            if (denuncias.length === 0) {
+                document.getElementById('denunciasList').innerHTML = '<p>No hay denuncias realizadas.</p>';
+            } else {
+                const listItems = denuncias.map(denuncia => `<p>${denuncia}</p>`).join('');
+                document.getElementById('denunciasList').innerHTML = listItems;
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codificar y Guardar Denuncia</title>
+    <link rel="stylesheet" href="./css/denunciar.css" />
+</head>
+
+<body>
+    <h1 class="tituloPrincipal">Denuncia de forma segura</h1>
+    <div class="containerPrincipal">
+        <div>
+            <img class="imgDenunciar" src="./img/denuncia.png" alt="10">
+        </div>
+
+        <div>
+            <h2>Ingresa tu denuncia</h3>
+                <textarea class="textArea" onkeypress="return soloLetras(event)" id="message"></textarea>
+                <br />
+                <button class="btnPrincipal" onclick="codificar()">Cifrar</button>
+                <button class="btnPrincipal" onclick="enviarYRegresar()">Enviar</button>
+
+                <h2>Denuncia Codificado:</h2>
+                <div class="mensajeCodificado" id="codigoCifrado"></div>
+        </div>
+    </div>
+
+    <script>
+        function codificar() {
+            const message = document.getElementById('message').value;
+            let encodedMessage = '';
+
+            for (let char of message) {
+                if (char === ' ') {
+                    encodedMessage += '_ ';
+                } else {
+                    const code = char.toUpperCase().charCodeAt(0) - 64;
+                    if (code > 0 && code <= 26) {
+                        encodedMessage += code + ' ';
+                    } else {
+                        encodedMessage += '_ ';
+                    }
+                }
+            }
+            // Mostrar código cifrado
+            document.getElementById('codigoCifrado').textContent = encodedMessage.trim();
+        }
+        function enviarYRegresar() {
+            const message = document.getElementById('message').value;
+            let encodedMessage = '';
+
+            for (let char of message) {
+                if (char === ' ') {
+                    encodedMessage += '_ ';
+                } else {
+                    const code = char.toUpperCase().charCodeAt(0) - 64;
+                    if (code > 0 && code <= 26) {
+                        encodedMessage += code + ' ';
+                    } else {
+                        encodedMessage += '_ ';
+                    }
+                }
+            }
+
+            const denuncias = JSON.parse(localStorage.getItem('denuncias')) || [];
+            denuncias.push(encodedMessage.trim());
+            localStorage.setItem('denuncias', JSON.stringify(denuncias));
+
+            swal({
+                title: "Denuncia enviada",
+                text: "Tu denuncia ha sido enviada correctamente.",
+                icon: "success",
+                button: "OK",
+            }).then(() => {
+                // Redireccionar a index.html
+                window.location.href = 'index.html';
+            });
+        }
+
+        const soloLetras = (event) => {
+            let key = event.keyCode || event.which;
+            let tecla = String.fromCharCode(key).toLowerCase();
+            let letras = " áéíóúabcdefghijklmnopqrstuvwxyz";
+            let tecla_numero = false
+            if (letras.indexOf(tecla) == -1 && !tecla_numero)
+                return false;
+        }
+
+    </script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+</body>
+
+</html>
